@@ -41,17 +41,15 @@ public class RegistrationController {
 	
 	@PostMapping("/registration")
 	public String registerUser(@Valid @ModelAttribute("form") RegistrationForm form, BindingResult bindingResult, HttpServletRequest request) {
+		String codeForConfirmation = confirmationCodeGenerator.generate();
+		
 		if (bindingResult.hasErrors()) {
 			return "registration-form";
 		}
 		
-		String recaptchaUserToken = request.getParameter("g-recaptcha-response");
-		RecaptchaResponse recaptchaResponse = googleRecaptchaService.getRecaptchaResponseForToken(recaptchaUserToken);
-		
-		if (!recaptchaResponse.isSuccess()) {
+		if (!isRecaptchaValid(request)) {
 			return "registration-form";
 		}
-		String codeForConfirmation = confirmationCodeGenerator.generate();
 		
 		HttpSession session = request.getSession();
 		
@@ -61,5 +59,17 @@ public class RegistrationController {
 		emailRegistrationService.sendRegistrationConfirmationCodeToEmail(form.getEmail(), codeForConfirmation);
 		
 		return "redirect:/registration/confirmation";
+	}
+	
+	private boolean isRecaptchaValid(HttpServletRequest request) {
+	    String recaptchaUserToken = request.getParameter("g-recaptcha-response");
+	    RecaptchaResponse recaptchaResponse = googleRecaptchaService.getRecaptchaResponseForToken(recaptchaUserToken);
+	    return recaptchaResponse.isSuccess();
+	}
+	
+	@GetMapping("/testmail")
+	@ResponseBody
+	public void testMail() {
+		emailRegistrationService.sendRegistrationConfirmationCodeToEmail("moskmailforcommunication@gmail.com", "123457890");
 	}
 }

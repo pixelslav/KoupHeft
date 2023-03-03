@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bookSuppliment.server.app.dtos.CodeConfirmation;
+import com.bookSuppliment.server.app.dtos.ConfirmationCode;
 import com.bookSuppliment.server.app.dtos.RegistrationForm;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
@@ -15,16 +15,16 @@ import com.bookSuppliment.server.app.service.EmailRegistrationService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-public class EmailConfirmationController {
+public class ConfirmationController {
 	
 	private UserRepository userRepository;
 	
-	public EmailConfirmationController(UserRepository userRepository) {
+	public ConfirmationController(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 	
 	@GetMapping("/registration/confirmation")
-	public String getEmailConfirmationForm(@ModelAttribute(name="code") CodeConfirmation code, HttpServletRequest request) {
+	public String getEmailConfirmationForm(@ModelAttribute(name="code") ConfirmationCode code, HttpServletRequest request) {
 		
 		if (request.getSession().getAttribute("registration_form") == null &&
 			request.getSession().getAttribute("confirmation_code") == null
@@ -36,7 +36,7 @@ public class EmailConfirmationController {
 	}
 	
 	@PostMapping("/registration/confirmation")
-	public String processCode(@ModelAttribute(name="code") CodeConfirmation code, HttpServletRequest request) {
+	public String processCode(@ModelAttribute(name="code") ConfirmationCode code, HttpServletRequest request) {
 		if (request.getSession().getAttribute("confirmation_code") != code.getCode()) {
 			return "email-confirmation";
 		}

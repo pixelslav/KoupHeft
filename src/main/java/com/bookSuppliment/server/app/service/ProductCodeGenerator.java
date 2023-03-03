@@ -6,10 +6,10 @@ import java.util.Random;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConfirmationCodeGenerator {
+public class ProductCodeGenerator {
     
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final int CODE_LENGTH = 5;
+    private static final int CODE_LENGTH = 9;
     
     private final Random random = new SecureRandom();
     

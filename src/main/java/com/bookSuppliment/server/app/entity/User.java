@@ -37,7 +37,7 @@ public class User implements UserDetails{
 	private String password;
 	
 	@ManyToMany(mappedBy = "users")
-	private Set<Book> books = new HashSet<>();
+	private Set<Product> products = new HashSet<>();
 	
 	private boolean isEnabled = false;
 	private boolean isNonExpired = true;
@@ -119,11 +119,11 @@ public class User implements UserDetails{
 		this.isNonLocked = isNonLocked;
 	}
 
-	public Set<Book> getBooks() {
-		return books;
+	public Set<Product> getProducts() {
+		return products;
 	}
 
-	public void setBooks(Set<Book> books) {
-		this.books = books;
+	public void setProducts(Set<Product> products) {
+		this.products = products;
 	}
 }

@@ -1,6 +1,6 @@
 package com.bookSuppliment.server.app.dtos;
 
-public class CodeConfirmation {
+public class ConfirmationCode {
 	
 	private String code;
 

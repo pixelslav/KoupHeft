@@ -13,8 +13,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "book_codes")
-public class BookCode implements Serializable{
+@Table(name = "product_codes")
+public class ProductCode implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -23,10 +23,25 @@ public class BookCode implements Serializable{
 	private Long id;
 	
 	@Column(unique = true)
-	@GeneratedValue(strategy = GenerationType.UUID)
 	private String code;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "book_id")
-	private Book book;
+	@JoinColumn(name = "product_id")
+	private Product product;
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 }

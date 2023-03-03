@@ -1,8 +1,14 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} **/
 module.exports = {
-  content: ["../../templates/*.{html, js}"],
+  content: [
+	    "../resources/templates/*.html",
+	],
   theme: {
-    extend: {},
+      extend: {
+	  boxShadow: {
+              'book-shadow': '0px 0px 9px 4px rgba(0, 0, 0, 0.3)',
+      }
+    }
   },
   plugins: [],
 }

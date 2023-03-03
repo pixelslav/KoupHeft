@@ -3,11 +3,20 @@ package com.bookSuppliment.server.app;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.client.RestTemplate;
+
+import com.bookSuppliment.server.app.entity.Notebook;
+import com.bookSuppliment.server.app.entity.ProductCode;
+import com.bookSuppliment.server.app.entity.User;
+import com.bookSuppliment.server.app.repository.ProductCodeRepository;
+import com.bookSuppliment.server.app.repository.ProductRepository;
+import com.bookSuppliment.server.app.repository.UserRepository;
+import com.bookSuppliment.server.app.service.ProductCodeGenerator;
 
 @Configuration
 public class KoupHeftConfiguration {
@@ -41,4 +50,29 @@ public class KoupHeftConfiguration {
 	    
 	    return mailSender;
 	}
+	
+//	@Bean
+//	public ApplicationRunner dataLoader(
+//			ProductRepository productRepository,
+//			ProductCodeRepository productCodeRepository,
+//			UserRepository userRepository,
+//			ProductCodeGenerator productCodeGenerator
+//	) {
+//		return args -> {
+//			Notebook testNotebook = new Notebook();
+//			testNotebook.setTitle("Test Excercise Notebook");
+//			productRepository.save(testNotebook);
+//			
+//			ProductCode productCode = new ProductCode();
+//		    productCode.setCode(productCodeGenerator.generate());
+//		    productCode.setProduct(testNotebook);
+//		    productCodeRepository.save(productCode);
+//		    
+//			User user = new User();
+//			user.setUsername("anton");
+//		    user.setEmail("test@gmail.com");
+//		    user.setPassword("testpassword");
+//		    userRepository.save(user);
+//		};
+//	}
 }

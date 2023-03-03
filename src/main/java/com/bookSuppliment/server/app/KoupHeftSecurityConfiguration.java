@@ -48,7 +48,8 @@ public class KoupHeftSecurityConfiguration {
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests(authorize -> authorize
-					.requestMatchers("/private").authenticated()
+					.requestMatchers("/products/*").authenticated()
+					.requestMatchers("/").authenticated()
 			)
 			.formLogin(form -> form 
 					.loginPage("/login")

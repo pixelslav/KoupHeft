@@ -21,9 +21,9 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
-import com.bookSuppliment.server.app.controller.EmailConfirmationController;
+import com.bookSuppliment.server.app.controller.ConfirmationController;
 import com.bookSuppliment.server.app.controller.RegistrationController;
-import com.bookSuppliment.server.app.dtos.CodeConfirmation;
+import com.bookSuppliment.server.app.dtos.ConfirmationCode;
 import com.bookSuppliment.server.app.dtos.RecaptchaResponse;
 import com.bookSuppliment.server.app.dtos.RegistrationForm;
 import com.bookSuppliment.server.app.entity.User;
@@ -123,23 +123,23 @@ class RegistrationTests {
 	@Test
 	public void codeConformation_passedValidCode_sessionIsClearUserIsSaved() {
 		// Arrange
-		EmailConfirmationController confirmationController = new EmailConfirmationController(userRepository);
+		ConfirmationController confirmationController = new ConfirmationController(userRepository);
 		
         RegistrationForm form = new RegistrationForm();
         form.setName("Barack Obama");
         form.setEmail("test@test.com");
         form.setPassword("password123");
         
-		CodeConfirmation codeConfirmation = new CodeConfirmation();
-		codeConfirmation.setCode("ASDFGJKLOF");
+		ConfirmationCode confirmationCode = new ConfirmationCode();
+		confirmationCode.setCode("ASDFGJKLOF");
 		
 		MockHttpServletRequest requestWithConfirmationCode = new MockHttpServletRequest();
 		requestWithConfirmationCode.getSession().setAttribute("registration_form", form);
-		requestWithConfirmationCode.getSession().setAttribute("confirmation_code", codeConfirmation.getCode());
+		requestWithConfirmationCode.getSession().setAttribute("confirmation_code", confirmationCode.getCode());
 		
 		// Act
 		
-		confirmationController.processCode(codeConfirmation, requestWithConfirmationCode);
+		confirmationController.processCode(confirmationCode, requestWithConfirmationCode);
 		
 		// Assert
 		

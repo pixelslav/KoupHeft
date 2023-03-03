@@ -16,8 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 
 @Entity
-@Table(name = "books")
-public class Book implements Serializable{
+public class Product implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -28,19 +27,38 @@ public class Book implements Serializable{
 	@Column(unique = true)
 	private String title;
 	
+	@Column(unique = true)
+	private String imagePath;
+	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(name = "book_user",
-			   joinColumns = @JoinColumn(name="book_id"),
+	@JoinTable(name = "product_user",
+			   joinColumns = @JoinColumn(name="product_id"),
 			   inverseJoinColumns = @JoinColumn(name="user_id"))
 	private Set<User> users = new HashSet<>();
 	
 	public void addUser(User user) {
 		this.users.add(user);
-		user.getBooks().add(this);
+		user.getProducts().add(this);
 	}
 	
 	public void removeUser(User user) {
 		this.users.remove(user);
-		user.getBooks().remove(this);
+		user.getProducts().remove(this);
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 }
