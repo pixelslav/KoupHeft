@@ -10,13 +10,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.client.RestTemplate;
 
+import com.bookSuppliment.server.app.component.ProductCodeGenerator;
 import com.bookSuppliment.server.app.entity.Notebook;
 import com.bookSuppliment.server.app.entity.ProductCode;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.ProductCodeRepository;
 import com.bookSuppliment.server.app.repository.ProductRepository;
 import com.bookSuppliment.server.app.repository.UserRepository;
-import com.bookSuppliment.server.app.service.ProductCodeGenerator;
 
 @Configuration
 public class KoupHeftConfiguration {

@@ -1,5 +1,6 @@
 package com.bookSuppliment.server.app.controller;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.bookSuppliment.server.app.component.ProductManager;
 import com.bookSuppliment.server.app.entity.Notebook;
 import com.bookSuppliment.server.app.entity.Product;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
-import com.bookSuppliment.server.app.service.ProductManager;
 
 @Controller
 public class MainController {
@@ -31,8 +32,11 @@ public class MainController {
 	@GetMapping("/")
 	public String getMainPage(Authentication authentication, Model model) {
 		
-		String usersEmailFromAuthentication = authentication.getPrincipal().toString();
-		User user = userRepository.findByEmail(usersEmailFromAuthentication).get();
+		// userPrincipalInAuthentication is a User object with a closed session with the database,
+		// so it cannot lazy retrieve the data that is associated with this object
+		User userPrincipal = (User) authentication.getPrincipal();
+		String usersEmail = userPrincipal.getEmail();
+		User user = userRepository.findByEmail(usersEmail).get();
 		
 		Set<Product> userProducts = user.getProducts();
 

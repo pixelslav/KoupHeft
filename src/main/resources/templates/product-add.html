@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full" style="min-height: 100%;">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/output.css" rel="stylesheet"/>
-    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <title>Fügen Sie ein neues Produkt hinzu</title>
 </head>
-<body class="space-y-12">
-    <header th:replace="header :: header"></header>
+<body class="relative space-y-12 h-full" style="min-height: 100%;">
+    <header th:replace="header-authenticated :: header"></header>
     <div id="form" class="flex items-center flex-col space-y-8">
         <div id="form-title" class="flex flex-col items-center space-y-6 w-full">
             <p class="max-[450px]:text-3xl text-5xl text-center font-bold">Produktcode</p>
@@ -20,29 +21,31 @@
             th:name="${_csrf.parameterName}" 
             th:value="${_csrf.token}" />     
           <div id="fields_code" class="flex flex-col">
-                    <input th:field="*{code}" class="uc-text-smooth max-[450px]:text-2xl max-[450px]:h-9 font-light text-4xl rounded-md py-1 text-center h-12 border border-black" maxlength="9" name="code" type="code" placeholder="XXXXXXXXX"/>
-                    <span 
-                        th:if="${#fields.hasErrors('code')}"
-                        th:errors="*{code}">Product Code Error</span>
-                  </div>
+              <span class="max-[450px]:flex hidden">*Geben Sie alle Buchstaben in Großbuchstaben ein</span>
+              <input th:field="*{code}" class="uc-text-smooth max-[450px]:text-2xl max-[450px]:h-9 font-light text-4xl rounded-md py-1 text-center h-12 border border-black" maxlength="9" name="code" type="code" placeholder="XXXXXXXXX"/>
+              <span 
+                th:if="${#fields.hasErrors('code')}"
+                th:errors="*{code}"></span>
+              </div>
             <div class="flex justify-center">
                 <button class="max-[450px]:text-2xl max-[450px]:h-9 font-semibold text-xl w-full h-12 text-white bg-red-600 hover:bg-red-700 font-semibold rounded-lg" >Weiter</button>
             </div>
         </form>
     </div>
+    <div id="empty-to-fill" class="h-full"></div>
     <footer th:replace="footer :: footer"></footer>
 
     <script>
     
-    const forceKeyPressUppercase = (e) => {
-      let el = e.target;
-      let maxAllowedLengthString = el.maxLength;
-      let charInput = e.keyCode;
+    function forceKeyPressUppercase(e) {
+      var el = e.target;
+      var maxAllowedLengthString = el.maxLength;
+      var charInput = e.keyCode;
       if((charInput >= 97) && (charInput <= 122)) { // lowercase
         if(!e.ctrlKey && !e.metaKey && !e.altKey) { // no modifier key
-          let newChar = charInput - 32;
-          let start = el.selectionStart;
-          let end = el.selectionEnd;
+          var newChar = charInput - 32;
+          var start = el.selectionStart;
+          var end = el.selectionEnd;
 
           if (maxAllowedLengthString != null) {
             if (maxAllowedLengthString == el.value.length) {

@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/output.css" rel="stylesheet"/>
-    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <title>Melden Sie sich bei Ihrem persönlichen KoupHefy-Konto an</title>
     <script type="text/javascript">
         var onloadCallback = function() {
           grecaptcha.render('html_element', {
@@ -15,7 +16,7 @@
       </script>
 </head>
 <body class="space-y-12">
-    <header th:replace="header :: header"></header>
+    <header th:replace="header-unauthenticated :: header"></header>
     <div id="form" class="flex items-center flex-col space-y-8">
         <div id="form_title" class="flex flex-col items-center">
             <div class="flex flex-col text-center items-center">
@@ -32,6 +33,10 @@
                 <div id="fields_password" class="flex flex-col">
                     <label class="text-medium" >Password</label>
                     <input class="text-medium font-light rounded-md py-1 px-3 h-12 border border-black" name="password" type="password" placeholder="Password"/>
+                </div>
+                <div>
+                    <label>Remember Me</label>
+                    <input type="checkbox" name="remember-me" />
                 </div>
 
             <div class="flex justify-center" id="html_element"></div>

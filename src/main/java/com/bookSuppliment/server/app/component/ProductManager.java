@@ -1,4 +1,4 @@
-package com.bookSuppliment.server.app.service;
+package com.bookSuppliment.server.app.component;
 
 import java.util.Collection;
 import java.util.List;

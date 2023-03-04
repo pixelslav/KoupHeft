@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bookSuppliment.server.app.component.ConfirmationCodeGenerator;
 import com.bookSuppliment.server.app.dtos.RecaptchaResponse;
 import com.bookSuppliment.server.app.dtos.RegistrationForm;
-import com.bookSuppliment.server.app.service.ConfirmationCodeGenerator;
 import com.bookSuppliment.server.app.service.EmailRegistrationService;
 import com.bookSuppliment.server.app.service.GoogleRecaptchaService;
 
@@ -65,11 +65,5 @@ public class RegistrationController {
 	    String recaptchaUserToken = request.getParameter("g-recaptcha-response");
 	    RecaptchaResponse recaptchaResponse = googleRecaptchaService.getRecaptchaResponseForToken(recaptchaUserToken);
 	    return recaptchaResponse.isSuccess();
-	}
-	
-	@GetMapping("/testmail")
-	@ResponseBody
-	public void testMail() {
-		emailRegistrationService.sendRegistrationConfirmationCodeToEmail("moskmailforcommunication@gmail.com", "123457890");
 	}
 }

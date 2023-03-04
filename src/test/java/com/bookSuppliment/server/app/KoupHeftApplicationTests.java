@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import com.bookSuppliment.server.app.component.ProductCodeGenerator;
 import com.bookSuppliment.server.app.dtos.RecaptchaResponse;
 import com.bookSuppliment.server.app.entity.Notebook;
 import com.bookSuppliment.server.app.entity.Product;
@@ -32,7 +33,6 @@ import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.ProductCodeRepository;
 import com.bookSuppliment.server.app.repository.ProductRepository;
 import com.bookSuppliment.server.app.repository.UserRepository;
-import com.bookSuppliment.server.app.service.ProductCodeGenerator;
 import com.bookSuppliment.server.app.testTools.WithMockUserEmailAuthentication;
 
 @SpringBootTest

@@ -21,6 +21,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
+import com.bookSuppliment.server.app.component.ConfirmationCodeGenerator;
 import com.bookSuppliment.server.app.controller.ConfirmationController;
 import com.bookSuppliment.server.app.controller.RegistrationController;
 import com.bookSuppliment.server.app.dtos.ConfirmationCode;
@@ -28,7 +29,6 @@ import com.bookSuppliment.server.app.dtos.RecaptchaResponse;
 import com.bookSuppliment.server.app.dtos.RegistrationForm;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
-import com.bookSuppliment.server.app.service.ConfirmationCodeGenerator;
 import com.bookSuppliment.server.app.service.EmailRegistrationService;
 import com.bookSuppliment.server.app.service.GoogleRecaptchaService;
 

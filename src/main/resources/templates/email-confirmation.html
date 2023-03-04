@@ -5,10 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/output.css" rel="stylesheet"/>
-    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <title>Bestätigen Sie Ihre E-Mail</title>
 </head>
 <body class="space-y-12">
-    <header th:replace="header :: header"></header>
+    <header th:replace="header-unauthenticated :: header"></header>
     <div id="form" class="flex items-center flex-col space-y-8">
         <div id="form-title" class="flex flex-col items-center space-y-6">
             <p class="text-3xl font-semibold">Email Bestätigung</p>
@@ -28,6 +29,7 @@
             </div>
         </form>
     </div>
+    <div id="empty-to-fill" class="h-full"></div>
     <footer th:replace="footer :: footer"></footer>
 
     <script>

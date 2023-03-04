@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
 
-public class EmailPasswordAuthenticationProvider implements AuthenticationManager, AuthenticationProvider {
+public class EmailPasswordAuthenticationProvider implements AuthenticationProvider {
 	
 	private final UserRepository userRepository;
 	
@@ -44,7 +44,7 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationManage
             throw new AuthenticationServiceException("Incorrect password");
         }
 
-        return new EmailPasswordAuthenticationToken(user.getEmail(), user.getPassword(), user.getAuthorities());
+        return new EmailPasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
     }
 
     @Override

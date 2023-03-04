@@ -53,8 +53,11 @@ public class ProductController {
 	        return "product-add";
 	    }
 		
-		String userEmail = authentication.getPrincipal().toString();
-		User user = userRepository.findByEmail(userEmail).get();
+		// userPrincipalInAuthentication is a User object with a closed session with the database,
+		// so it cannot lazy retrieve the data that is associated with this object
+		User userPrincipal = (User) authentication.getPrincipal();
+		String usersEmail = userPrincipal.getEmail();
+		User user = userRepository.findByEmail(usersEmail).get();
 		
 		Product product = productCode.get().getProduct();
 		
