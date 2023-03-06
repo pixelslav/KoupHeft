@@ -13,10 +13,10 @@
 <div class="flex items-center flex-col space-y-11">
     <div class="flex flex-col items-center space-y-2 w-5/6">
         <div class="w-full">
-            <div th:if="${productManager.isExistSuchProduct(products, 'Notebook')}" id="heft-section" >
+            <div th:if="${productFilter.isExistSuchProduct(products, 'Notebook')}" id="heft-section" >
                 <p class="text-3xl font-semibold border-b-2 py-3.5 border-slate-500" id="header">Hefte</p>
                 <div class="max-[550px]:justify-center flex flex-row pt-8 space-x-11">
-                    <div class="max-[350px]:grid-cols-1 max-[550px]:grid-cols-2 max-[750px]:grid-cols-3 max-[950px]:grid-cols-4 grid-cols-5 grid gap-y-10 gap-x-12" th:each="notebook : ${productManager.filterProducts(products, 'Notebook')}">
+                    <div th:each="notebook : ${productFilter.filterProducts(products, 'Notebook')}" class="max-[350px]:grid-cols-1 max-[550px]:grid-cols-2 max-[750px]:grid-cols-3 max-[950px]:grid-cols-4 grid-cols-5 grid gap-y-10 gap-x-12">
                         <img width="120" height="160" class="h-40 w-30 book-shadow" th:src="${notebook.getImagePath()}" style="box-shadow: 0px 0px 9px 4px rgba(0, 0, 0, 0.3);">
                     </div>
                 </div>
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="flex justify-center w-full" style="max-width: 300px;">
-        <a href="/products/add" class="flex justify-center items-center text-centet font-semibold text-xl text-center w-full h-12 text-white bg-lime-600 hover:bg-lime-700 font-semibold rounded-lg" >Produkt hinzufügen</a>
+        <a href="/products/add" class="flex justify-center items-center font-semibold text-xl text-center w-full h-12 text-white bg-lime-600 hover:bg-lime-700 font-semibold rounded-lg" >Produkt hinzufügen</a>
     </div>
 </div>
 <div id="empty-to-fill" class="h-full"></div>

@@ -9,14 +9,23 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -33,118 +42,104 @@ import com.bookSuppliment.server.app.service.EmailRegistrationService;
 import com.bookSuppliment.server.app.service.GoogleRecaptchaService;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class RegistrationTests {
 	
-	@Mock
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@MockBean
     private EmailRegistrationService emailRegistrationService;
 
-    @Mock
+    @MockBean
     private GoogleRecaptchaService googleRecaptchaService;
 
     @Mock
     private RecaptchaResponse recaptchaResponse;
     
-    @Mock
+    @MockBean
     private UserRepository userRepository;
     
-    @Autowired
-    private ConfirmationCodeGenerator confirmationCodeGenerator;
-	
-    @Autowired
-    private Validator validator;
-    
 	@Test
-	public void registrationForm_passedValidRegistrationForm_setFormToSession() {
+	public void registrationForm_passedValidRegistrationForm_setFormToSession() throws Exception {
 		// Arrange
         when(recaptchaResponse.isSuccess()).thenReturn(true);
-        when(googleRecaptchaService.getRecaptchaResponseForToken("code")).thenReturn(recaptchaResponse);
-        
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addParameter("g-recaptcha-response", "code");
-        
+        when(googleRecaptchaService.getRecaptchaResponseForToken("test")).thenReturn(recaptchaResponse);
+           
         RegistrationForm form = new RegistrationForm();
         form.setName("Barack Obama");
-        form.setEmail("test@test.com");
-        form.setPassword("password123");
+        form.setEmail("test@gmail.com");
+        form.setPassword("testpassword");
         
-        BindingResult bindingResult = new BeanPropertyBindingResult(form, "registration_form");
-        validator.validate(form, bindingResult);
+		MockHttpSession session = new MockHttpSession();
         
-        RegistrationController registrationController = new RegistrationController(
-        		emailRegistrationService,
-        		googleRecaptchaService,
-        		confirmationCodeGenerator
-        );
+        MockHttpServletRequestBuilder requestToRegistration = MockMvcRequestBuilders.post("/registration")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+				.session(session)
+				.param("name", "Barack Obama")
+				.param("email", "test@gmail.com")
+				.param("password", "testpassword")
+				.param("g-recaptcha-response", "test");
         
         // Act
-        registrationController.registerUser(form, bindingResult, request);
+		this.mockMvc.perform(requestToRegistration.with(csrf())).andExpect(status().isFound());
         
         // Assert
-        RegistrationForm formInSession = (RegistrationForm) request.getSession().getAttribute("registration_form");
+        RegistrationForm formInSession = (RegistrationForm) session.getAttribute("registration_form");
         
         assertAll("registration",
-                () -> assertSame(form, request.getSession().getAttribute("registration_form")),
-                () -> assertNotNull(request.getSession().getAttribute("confirmation_code"))
+                () -> assertTrue(form.equals(formInSession)),
+                () -> assertNotNull(session.getAttribute("confirmation_code"))
         );
 	}
 	
 	@Test
-	public void registrationForm_passedInvalidRegistrationForm_sessionIsNullAndThereAreErrors() {
+	public void registrationForm_passedInvalidRegistrationForm_sessionIsNullAndThereAreErrors() throws Exception {
 		// Arrange
         when(recaptchaResponse.isSuccess()).thenReturn(true);
-        when(googleRecaptchaService.getRecaptchaResponseForToken("code")).thenReturn(recaptchaResponse);
+        when(googleRecaptchaService.getRecaptchaResponseForToken("test")).thenReturn(recaptchaResponse);
         
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addParameter("g-recaptcha-response", "code");
+		MockHttpSession session = new MockHttpSession();
         
-        RegistrationForm form = new RegistrationForm();
-        form.setName("");
-        form.setEmail("uehejdjjs");
-        form.setPassword("1233isisiej");
-        
-        BindingResult bindingResult = new BeanPropertyBindingResult(form, "registration_form");
-        validator.validate(form, bindingResult);
-        
-        RegistrationController registrationController = new RegistrationController(
-        		emailRegistrationService,
-        		googleRecaptchaService,
-        		new ConfirmationCodeGenerator()
-        );
+        MockHttpServletRequestBuilder requestToRegistration = MockMvcRequestBuilders.post("/registration")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+				.session(session)
+				.param("name", "")
+				.param("email", "123")
+				.param("password", "41")
+				.param("g-recaptcha-response", "test");
         
         // Act
-        registrationController.registerUser(form, bindingResult, request);
+        this.mockMvc.perform(requestToRegistration.with(csrf())).andExpect(status().isOk());
         
         // Assert
-        assertTrue(request.getSession().getAttribute("registration_form") == null);
-        assertTrue(request.getSession().getAttribute("registration_code") == null);
-        assertTrue(bindingResult.hasErrors());
+        assertTrue(session.getAttribute("registration_form") == null);
+        assertTrue(session.getAttribute("registration_code") == null);
     }
 	
 	@Test
-	public void codeConformation_passedValidCode_sessionIsClearUserIsSaved() {
+	public void codeConformation_passedValidCode_sessionIsClearUserIsSaved() throws Exception {
 		// Arrange
-		ConfirmationController confirmationController = new ConfirmationController(userRepository);
-		
         RegistrationForm form = new RegistrationForm();
         form.setName("Barack Obama");
         form.setEmail("test@test.com");
         form.setPassword("password123");
+		
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute("registration_form", form);
+		session.setAttribute("confirmation_code", "test");
+		
+        MockHttpServletRequestBuilder requestToRegistration = MockMvcRequestBuilders.post("/registration/confirmation")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+				.session(session)
+				.param("code", "test");
         
-		ConfirmationCode confirmationCode = new ConfirmationCode();
-		confirmationCode.setCode("ASDFGJKLOF");
-		
-		MockHttpServletRequest requestWithConfirmationCode = new MockHttpServletRequest();
-		requestWithConfirmationCode.getSession().setAttribute("registration_form", form);
-		requestWithConfirmationCode.getSession().setAttribute("confirmation_code", confirmationCode.getCode());
-		
 		// Act
-		
-		confirmationController.processCode(confirmationCode, requestWithConfirmationCode);
+		this.mockMvc.perform(requestToRegistration.with(csrf())).andExpect(status().isOk());
 		
 		// Assert
-		
-		assertThat(requestWithConfirmationCode.getSession().getAttribute("registration_form")).isNull();
-		assertThat(requestWithConfirmationCode.getSession().getAttribute("confirmation_code")).isNull();
+		assertThat(session.getAttribute("registration_form")).isNull();
+		assertThat(session.getAttribute("confirmation_code")).isNull();
 		
 		verify(userRepository).save(any(User.class));
 	}

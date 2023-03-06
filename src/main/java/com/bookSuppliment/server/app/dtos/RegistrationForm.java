@@ -19,8 +19,24 @@ public class RegistrationForm implements Serializable{
 	
 	@NotBlank(message="Das Password wird benötigt")
 	@Size(min=8, message="Das Password muss mehr als 8 Briefe sein")
-//	@Pattern(regexp="^[A-Z0-9]+$", message="Das Passwort muss einen Großbuchstaben und eine Zahl enthalten")
 	private String password;
+	
+	@Override
+	public String toString() {
+	    return "RegistrationForm{" +
+	            "name='" + name + '\'' +
+	            ", email='" + email + '\'' +
+	            ", password='" + password + '\'' +
+	            '}';
+	}
+	
+	@Override 
+	public boolean equals(Object object) {
+		RegistrationForm comparisonForm = (RegistrationForm) object;
+		return this.name == comparisonForm.name &&
+				this.email == comparisonForm.email &&
+					this.password == comparisonForm.password;
+	}
 	
 	public String getName() {
 		return name;

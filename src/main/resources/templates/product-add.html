@@ -10,7 +10,7 @@
 </head>
 <body class="relative space-y-12 h-full" style="min-height: 100%;">
     <header th:replace="header-authenticated :: header"></header>
-    <div id="form" class="flex items-center flex-col space-y-8">
+    <div id="form" class="flex items-center flex-col space-y-8 h-full">
         <div id="form-title" class="flex flex-col items-center space-y-6 w-full">
             <p class="max-[450px]:text-3xl text-5xl text-center font-bold">Produktcode</p>
             <p class="max-[450px]:text-sm text-base font-light text-center text-black">Den Code finden Sie auf der Innenseite des Buches.</p>
@@ -21,9 +21,10 @@
             th:name="${_csrf.parameterName}" 
             th:value="${_csrf.token}" />     
           <div id="fields_code" class="flex flex-col">
-              <span class="max-[450px]:flex hidden">*Geben Sie alle Buchstaben in Großbuchstaben ein</span>
+              <span class="max-[450px]:flex text-xs font-light hidden">*Geben Sie alle Buchstaben in Großbuchstaben ein</span>
               <input th:field="*{code}" class="uc-text-smooth max-[450px]:text-2xl max-[450px]:h-9 font-light text-4xl rounded-md py-1 text-center h-12 border border-black" maxlength="9" name="code" type="code" placeholder="XXXXXXXXX"/>
-              <span 
+              <span
+                class="text-red-600"
                 th:if="${#fields.hasErrors('code')}"
                 th:errors="*{code}"></span>
               </div>
@@ -32,7 +33,6 @@
             </div>
         </form>
     </div>
-    <div id="empty-to-fill" class="h-full"></div>
     <footer th:replace="footer :: footer"></footer>
 
     <script>

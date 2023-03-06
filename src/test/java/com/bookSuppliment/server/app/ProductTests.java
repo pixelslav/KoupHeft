@@ -37,7 +37,7 @@ import com.bookSuppliment.server.app.testTools.WithMockUserEmailAuthentication;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class KoupHeftApplicationTests {
+class ProductTests {
 	
 	@MockBean
 	private UserRepository userRepository;

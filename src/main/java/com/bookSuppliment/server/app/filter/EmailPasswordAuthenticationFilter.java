@@ -26,12 +26,12 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
 	
 	private String emailParameter = SPRING_SECURITY_FORM_EMAIL_KEY;
 	
-//	@Autowired
-//    private GoogleRecaptchaService googleRecaptchaService;
+	@Autowired
+    private GoogleRecaptchaService googleRecaptchaService;
 	
 	public EmailPasswordAuthenticationFilter() {
 		super();
-//		this.googleRecaptchaService = googleRecaptchaService;
+		this.googleRecaptchaService = googleRecaptchaService;
 	}
 	
 	public EmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -48,27 +48,25 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
 		String email = obtainEmail(request);
 		String password = obtainPassword(request);
 		
-//		String recaptchaUserToken = obtainRecaptchaUserToken(request);
-//        RecaptchaResponse recaptchaResponse = googleRecaptchaService.getRecaptchaResponseForToken(recaptchaUserToken);
-        
-//        if (!recaptchaResponse.isSuccess()) {
-//        	throw new AuthenticationServiceException("ReCaptcha response is invalid");
-//        }
+		if (!isRecaptchaValid(request)) {
+			throw new AuthenticationServiceException("Captcha is invalid");
+		}
 		
 		EmailPasswordAuthenticationToken authRequest = new EmailPasswordAuthenticationToken(email,
 				password);
 		setDetails(request, authRequest);
-		logger.info("EmailPasswordAuthenticationFilter works!!!!");
 		return this.getAuthenticationManager().authenticate(authRequest);
+	}
+	
+	private boolean isRecaptchaValid(HttpServletRequest request) {
+	    String recaptchaUserToken = request.getParameter("g-recaptcha-response");
+	    RecaptchaResponse recaptchaResponse = googleRecaptchaService.getRecaptchaResponseForToken(recaptchaUserToken);
+	    return recaptchaResponse.isSuccess();
 	}
 
 	protected void setDetails(HttpServletRequest request, EmailPasswordAuthenticationToken authRequest) {
 		authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
 	}
-	
-    public String obtainRecaptchaUserToken(HttpServletRequest request) {    	
-    	return request.getParameter("g-recaptcha-response");
-    }
     
 	@Nullable
 	protected String obtainEmail(HttpServletRequest request) {

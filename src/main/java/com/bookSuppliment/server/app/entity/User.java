@@ -39,7 +39,7 @@ public class User implements UserDetails{
 	@ManyToMany(mappedBy = "users")
 	private Set<Product> products = new HashSet<>();
 	
-	private boolean isEnabled = false;
+	private boolean isEnabled = true;
 	private boolean isNonExpired = true;
 	private boolean isNonLocked = true;
 	private boolean isCredentialsNonExpired = true;
@@ -47,6 +47,15 @@ public class User implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+	
+	@Override
+	public String toString() {
+	    return "User{" +
+	            "username='" + username + '\'' +
+	            ", email='" + email + '\'' +
+	            ", password='" + password + '\'' +
+	            '}';
 	}
 
 	@Override

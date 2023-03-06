@@ -11,26 +11,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.bookSuppliment.server.app.component.ProductManager;
+import com.bookSuppliment.server.app.component.CategoryFilterComponent;
 import com.bookSuppliment.server.app.entity.Notebook;
 import com.bookSuppliment.server.app.entity.Product;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
 
 @Controller
-public class MainController {
+public class PersonalProfileController {
 	
 	private final UserRepository userRepository;
 	
-	private final ProductManager productManager;
+	private final CategoryFilterComponent productFilter;
 	
-	public MainController (UserRepository userRepository, ProductManager productManager) {
+	public PersonalProfileController (UserRepository userRepository, CategoryFilterComponent productManager) {
 		this.userRepository = userRepository;
-		this.productManager = productManager;
+		this.productFilter = productManager;
 	}
 	
 	@GetMapping("/")
-	public String getMainPage(Authentication authentication, Model model) {
+	public String getProfilePage(Authentication authentication, Model model) {
 		
 		// userPrincipalInAuthentication is a User object with a closed session with the database,
 		// so it cannot lazy retrieve the data that is associated with this object
@@ -45,8 +45,10 @@ public class MainController {
 			return "main-page-without-products";
 		}
 		
+		// productProcessor is used to check if a certain category exists and filter products.
+		// It is important to include it in the context of Thymeleaf
 		model.addAttribute("products", user.getProducts());
-		model.addAttribute("productManager", productManager);
+		model.addAttribute("productFilter", productFilter);
 
 		return "main-page-with-products";
 	}

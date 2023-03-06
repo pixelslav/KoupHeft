@@ -66,9 +66,7 @@ public class ProductController {
 			return "product-add";
 		}
 		
-//		user.getProducts().add(product);
 		product.addUser(user);
-//		userRepository.save(user);
 		productRepository.save(product);
 		
 		return "redirect:/products/add/successfully";

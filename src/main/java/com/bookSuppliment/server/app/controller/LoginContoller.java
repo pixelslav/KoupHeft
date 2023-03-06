@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginContoller {
 	
 	@GetMapping("/login")
-	public String getLoginTestPage() {
+	public String getLoginPage() {
 		return "login-form";
+	}
+	
+	@GetMapping("/logout")
+	public String getLogoutPage() {
+		return "logout-form";
 	}
 	
 }

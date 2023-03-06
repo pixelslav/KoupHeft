@@ -10,7 +10,7 @@
 </head>
 <body class="space-y-12">
 <header th:replace="header-authenticated :: header"></header>
-<div class="flex items-center flex-col space-y-11">
+<div class="flex items-center flex-col space-y-11 h-full">
     <div>
         <img src="../static/images/empty-page.png">
     </div>
@@ -22,7 +22,6 @@
         <a href="/products/add" class="flex justify-center items-center text-centet font-semibold text-xl text-center w-full h-12 text-white bg-lime-600 hover:bg-lime-700 font-semibold rounded-lg" >Produkt hinzufügen</a>
     </div>
 </div>
-<div id="empty-to-fill" class="h-full"></div>
 <footer th:replace="footer :: footer"></footer>
 </body>
 </html>
