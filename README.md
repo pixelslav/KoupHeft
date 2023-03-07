@@ -12,13 +12,13 @@ In diesem Projekt habe ich versucht, die folgenden Funktionen zu implementieren
 
 **Auf dem Computer**
 
-<img height="200" width="400" src="https://i.imgur.com/EKrWfBz.png" /><img height="250" width="400" src="https://i.imgur.com/cuOi464.png" />
-<img height="250" width="400" src="https://i.imgur.com/eC26Jct.png" /><img height="250" width="400" src="https://i.imgur.com/XPzjwXt.png" />
+<img height="300" width="400" src="https://i.imgur.com/N2bfwNI.png" /><img height="300" width="500" src="https://i.imgur.com/wH2yxp5.png" />
+<img height="250" width="400" src="https://i.imgur.com/9KEOb9q.png" />
+<img height="250" width="550" src="https://i.imgur.com/oG7Tm12.png" />
 
 **Am Telefon**
 
-<img height="303" width="183" src="https://i.imgur.com/OnBpetl.png" /><img height="353" width="183" src="https://i.imgur.com/kP1OSbj.png" />
-<img height="453" width="183" src="https://i.imgur.com/KQ728H6.png" />
+<img height="303" width="203" src="https://i.imgur.com/kkiREzq.png" /><img height="353" width="283" src="https://i.imgur.com/nyHanZI.png" /><img height="353" width="283" src="https://i.imgur.com/MZpZIe7.png" />
 
 ### Registrierung
 Dies ist eine vollständige Registrierung mit E-Mail-Validierung mit Spring Mail Sender und Google Captcha, die Validierung der Registrierungsdaten erfolgt mit Spring Boot Validation.

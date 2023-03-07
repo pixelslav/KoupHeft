@@ -54,9 +54,6 @@ class SecurityTests {
 	@MockBean
 	private UserRepository userRepository;
 	
-	@MockBean
-	private GoogleRecaptchaService googleRecaptchaService;
-	
     @Mock
     private RecaptchaResponse recaptchaResponse;
 	
@@ -66,7 +63,6 @@ class SecurityTests {
 	@Test
 	public void emailPasswordAuthenticationFilter_requestWithValidUserCredentials_userIsAuthenticated() throws Exception {		
 		when(recaptchaResponse.isSuccess()).thenReturn(true);
-		when(googleRecaptchaService.getRecaptchaResponseForToken("test")).thenReturn(recaptchaResponse);
 		
 		User user = new User();
 		user.setUsername("anton");
@@ -79,8 +75,7 @@ class SecurityTests {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/login")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 				.param("email", "test@gmail.com")
-				.param("password", "testpassword")
-				.param("g-recaptcha-response", "test");
+				.param("password", "testpassword");
 		
 		//	Moving from /login to / means the request was successfully authenticated
 		this.mockMvc.perform(request.with(csrf())).andExpect(status().isFound());
@@ -89,7 +84,6 @@ class SecurityTests {
 	@Test
 	public void emailPasswordAuthenticationFilter_requestWithInvalidUserCredentials_userIsNotAuthenticated() throws Exception {
 		when(recaptchaResponse.isSuccess()).thenReturn(true);
-		when(googleRecaptchaService.getRecaptchaResponseForToken("test")).thenReturn(recaptchaResponse);
 		
 		User user = new User();
 		user.setUsername("anton");
@@ -102,8 +96,7 @@ class SecurityTests {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/login")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 				.param("email", "fail@gmail.com")
-				.param("password", "invalidpassword")
-				.param("g-recaptcha-response", "test");
+				.param("password", "invalidpassword");
 		
 		this.mockMvc.perform(request.with(csrf())).andExpect(status().isFound());
 	}

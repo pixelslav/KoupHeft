@@ -31,7 +31,7 @@ import com.bookSuppliment.server.app.filter.EmailPasswordAuthenticationProvider;
 import com.bookSuppliment.server.app.filter.SimpleAuthenticationManager;
 import com.bookSuppliment.server.app.repository.UserRepository;
 import com.bookSuppliment.server.app.service.GoogleRecaptchaService;
-import com.bookSuppliment.server.app.service.UserDetailsEmailService;
+import com.bookSuppliment.server.app.service.DefaultUserDetailsService;
 
 @Configuration
 public class KoupHeftSecurityConfiguration {
@@ -72,8 +72,8 @@ public class KoupHeftSecurityConfiguration {
 		 }
 	
 	@Bean
-	public UserDetailsEmailService userDetailsService() {
-		return new UserDetailsEmailService();
+	public DefaultUserDetailsService userDetailsService() {
+		return new DefaultUserDetailsService();
 	}
 	
 	@Bean

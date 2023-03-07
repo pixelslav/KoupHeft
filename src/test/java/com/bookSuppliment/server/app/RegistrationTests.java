@@ -38,6 +38,7 @@ import com.bookSuppliment.server.app.dtos.RecaptchaResponse;
 import com.bookSuppliment.server.app.dtos.RegistrationForm;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
+import com.bookSuppliment.server.app.service.DefaultUserDetailsService;
 import com.bookSuppliment.server.app.service.EmailRegistrationService;
 import com.bookSuppliment.server.app.service.GoogleRecaptchaService;
 
@@ -53,6 +54,9 @@ class RegistrationTests {
 
     @MockBean
     private GoogleRecaptchaService googleRecaptchaService;
+    
+    @MockBean
+    private DefaultUserDetailsService userDetailsSevice;
 
     @Mock
     private RecaptchaResponse recaptchaResponse;
@@ -65,7 +69,9 @@ class RegistrationTests {
 		// Arrange
         when(recaptchaResponse.isSuccess()).thenReturn(true);
         when(googleRecaptchaService.getRecaptchaResponseForToken("test")).thenReturn(recaptchaResponse);
-           
+        
+        when(userDetailsSevice.isUserWithSuchEmailExist("test@gmail.com")).thenReturn(false);
+        
         RegistrationForm form = new RegistrationForm();
         form.setName("Barack Obama");
         form.setEmail("test@gmail.com");

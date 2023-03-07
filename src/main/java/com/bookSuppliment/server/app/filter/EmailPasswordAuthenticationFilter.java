@@ -26,12 +26,8 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
 	
 	private String emailParameter = SPRING_SECURITY_FORM_EMAIL_KEY;
 	
-	@Autowired
-    private GoogleRecaptchaService googleRecaptchaService;
-	
 	public EmailPasswordAuthenticationFilter() {
 		super();
-		this.googleRecaptchaService = googleRecaptchaService;
 	}
 	
 	public EmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -48,20 +44,10 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
 		String email = obtainEmail(request);
 		String password = obtainPassword(request);
 		
-		if (!isRecaptchaValid(request)) {
-			throw new AuthenticationServiceException("Captcha is invalid");
-		}
-		
 		EmailPasswordAuthenticationToken authRequest = new EmailPasswordAuthenticationToken(email,
 				password);
 		setDetails(request, authRequest);
 		return this.getAuthenticationManager().authenticate(authRequest);
-	}
-	
-	private boolean isRecaptchaValid(HttpServletRequest request) {
-	    String recaptchaUserToken = request.getParameter("g-recaptcha-response");
-	    RecaptchaResponse recaptchaResponse = googleRecaptchaService.getRecaptchaResponseForToken(recaptchaUserToken);
-	    return recaptchaResponse.isSuccess();
 	}
 
 	protected void setDetails(HttpServletRequest request, EmailPasswordAuthenticationToken authRequest) {

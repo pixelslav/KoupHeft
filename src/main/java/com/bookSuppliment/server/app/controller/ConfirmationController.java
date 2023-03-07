@@ -3,6 +3,7 @@ package com.bookSuppliment.server.app.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -16,6 +17,8 @@ import com.bookSuppliment.server.app.dtos.RegistrationForm;
 import com.bookSuppliment.server.app.entity.User;
 import com.bookSuppliment.server.app.repository.UserRepository;
 import com.bookSuppliment.server.app.service.EmailRegistrationService;
+import com.bookSuppliment.server.app.service.SessionService;
+import com.bookSuppliment.server.app.service.DefaultUserDetailsService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,9 +30,14 @@ public class ConfirmationController {
 	private static final Logger logger = LoggerFactory.getLogger(ConfirmationController.class);
     
 	private UserRepository userRepository;
+	private SessionService sessionService;
 	
-	public ConfirmationController(UserRepository userRepository) {
+	public ConfirmationController(
+			UserRepository userRepository,
+			SessionService sessionService
+	) {
 		this.userRepository = userRepository;
+		this.sessionService = sessionService;
 	}
 	
 	@GetMapping("/registration/confirmation")
@@ -56,36 +64,26 @@ public class ConfirmationController {
 			bindingResult.addError(new FieldError("product_code", "code", "Code ist ungültig"));
 			return "email-confirmation";
 		}
+		HttpSession session = request.getSession();
 		
-		RegistrationForm form = (RegistrationForm) request.getSession().getAttribute("registration_form");
+		RegistrationForm form = (RegistrationForm) session.getAttribute("registration_form");
 		User newUser = createUserFromRegistrationForm(form);
 		userRepository.save(newUser);
 		
-		HttpSession session = request.getSession();
-		removeRegistrationFormFromSession(session);
-		removeConfirmationCodeFromSession(session);
+		sessionService.removeAtrributeFromSession(session, "registration_form");
+		sessionService.removeAtrributeFromSession(session, "confirmation_code");
 		
 		return "registration-successfully";
 	}
 	
-	private void removeRegistrationFormFromSession(HttpSession session) {
-		session.removeAttribute("registration_form");
-		logger.debug("The registration form has been removed from the session");
-	}
-	
-	private void removeConfirmationCodeFromSession(HttpSession session) {
-		session.removeAttribute("confirmation_code");
-		logger.debug("The confirmation code has been removed from the session");
-	}
-	
-	private User createUserFromRegistrationForm(RegistrationForm form) {
+	private User createUserFromRegistrationForm(RegistrationForm registrationForm) {
 		User userFromRegistration = new User();
-		userFromRegistration.setUsername(form.getName());
-		userFromRegistration.setEmail(form.getEmail());
-		userFromRegistration.setPassword(form.getPassword());
+		userFromRegistration.setUsername(registrationForm.getName());
+		userFromRegistration.setEmail(registrationForm.getEmail());
+		userFromRegistration.setPassword(registrationForm.getPassword());
 		
 		logger.debug(String.format(
-				"User with value %s has been created from registration form in the session",
+				"User with value %s has been created from registration form",
 				userFromRegistration.toString()
 				));
 		

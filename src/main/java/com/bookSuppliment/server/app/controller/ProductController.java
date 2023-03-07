@@ -69,7 +69,7 @@ public class ProductController {
 		product.addUser(user);
 		productRepository.save(product);
 		
-		return "redirect:/products/add/successfully";
+		return "redirect:/";
 	}
 	
 	@GetMapping("/products/add/successfully")
